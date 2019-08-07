@@ -7,4 +7,4 @@ export const PLAYER_WIDTH = 100;
 export const PLAYER_HEIGHT = 20;
 
 export const RESPAWN_PLAYER_COORD_X = 200;
-export const RESPAWN_PLAYER_COORD_Y = 700;
+export const RESPAWN_PLAYER_COORD_Y = 750;

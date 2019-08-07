@@ -15,12 +15,15 @@ export default class GameField {
 
     constructor(rootElement){
         this.rootElement = rootElement;
+
+        this.isStartGame = false;
     }
 
     initGame = () => {
         this.drawField();
         this.getContext();
         this.respawnPlayer();
+
     };
 
     drawField = () => {
@@ -30,8 +33,19 @@ export default class GameField {
         this.canvas.width = FIELD_WIDTH;
         this.canvas.height = FIELD_HEIGHT;
         this.rootElement.appendChild(this.canvas);
-        console.log('draw field complete');
 
+        let startButton = document.createElement('button');
+        startButton.innerText = 'Start game';
+        this.rootElement.appendChild(startButton);
+
+        startButton.addEventListener('click', this.startGame);
+
+        let stopButton = document.createElement('button');
+        stopButton.innerText = 'Stop Game';
+        this.rootElement.appendChild(stopButton);
+
+        stopButton.addEventListener('click', this.stopGame);
+        console.log('draw field complete');
     };
 
     getContext = () => {
@@ -45,9 +59,6 @@ export default class GameField {
             return;
         }
         this.ctx = this.canvas.getContext('2d');
-
-
-
         console.log('context is receive');
     };
 
@@ -61,14 +72,37 @@ export default class GameField {
             color: PLAYER_COLOR
         });
 
-        this.player.respawn(this.ctx);
+        this.player.render(this.ctx);
+
+        this.canvas.addEventListener('mousemove', (e) => {
+            this.player.move(e);
+        });
+    };
+
+    render = () => {
+        if (this.isStartGame){
+            console.log('frame');
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.player.render(this.ctx);
+            requestAnimationFrame(this.render);
+        }
+        else{
+            return;
+        }
+
+    };
 
 
+    startGame = () => {
+        console.log('start game');
+        this.isStartGame = true;
+        this.animation = requestAnimationFrame(this.render);
+    };
 
+    stopGame = () => {
+        console.log('stop game');
+        this.isStartGame = false;
+        cancelAnimationFrame(this.animation);
     }
-
-
-
-
 }
 
