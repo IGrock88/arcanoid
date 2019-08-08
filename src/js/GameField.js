@@ -5,9 +5,12 @@ import {
     RESPAWN_PLAYER_COORD_Y,
     PLAYER_WIDTH,
     PLAYER_HEIGHT,
-    PLAYER_COLOR
+    PLAYER_COLOR, RESPAWN_BALL_COORD_X, RESPAWN_BALL_COORD_Y, BALL_SPEED, BALL_START_DIRECTION, BALL_RADIUS
 } from "../config";
 import Player from "./Player";
+import Stats from "stats.js/src/Stats";
+import Ball from "./Ball";
+
 
 
 export default class GameField {
@@ -20,6 +23,7 @@ export default class GameField {
     }
 
     initGame = () => {
+        this.initStats();
         this.drawField();
         this.getContext();
         this.respawnPlayer();
@@ -79,11 +83,38 @@ export default class GameField {
         });
     };
 
+    respawnBall = () => {
+
+        this.ball = new Ball({
+            coordX: RESPAWN_BALL_COORD_X,
+            coordY: RESPAWN_BALL_COORD_Y,
+            speed: BALL_SPEED,
+            direction: BALL_START_DIRECTION,
+            radius: BALL_RADIUS
+        });
+
+        this.ball.render(this.ctx);
+    };
+
     render = () => {
+
+
+
+
         if (this.isStartGame){
             console.log('frame');
+
+            this.stats.begin();
+
+
+
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.player.render(this.ctx);
+
+
+
+
+            this.stats.end();
             requestAnimationFrame(this.render);
         }
         else{
@@ -103,6 +134,12 @@ export default class GameField {
         console.log('stop game');
         this.isStartGame = false;
         cancelAnimationFrame(this.animation);
+    };
+
+    initStats =() => {
+        this.stats = new Stats();
+        this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild( this.stats.dom );
     }
 }
 

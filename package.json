@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "stats.js": "^0.17.0"
   }
 }
